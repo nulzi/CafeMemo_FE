@@ -12,6 +12,10 @@ type TChangeTableName = {
   tableName: string;
 };
 
+type TDeleteTable = {
+  tableId: string;
+};
+
 type TAddTeam = {
   teamType: TTeamType;
   team: ITeam;
@@ -155,7 +159,11 @@ const tablesSlice = createSlice({
     addTable: (state, { payload }: PayloadAction<ITable>) => {
       state.currentTables.push(payload);
     },
-    deleteTable: () => {},
+    deleteTable: (state, { payload }: PayloadAction<TDeleteTable>) => {
+      state.currentTables = state.currentTables.filter(
+        (table) => table.tableId !== payload.tableId
+      );
+    },
     addTeam: (state, { payload }: PayloadAction<TAddTeam>) => {
       payload.teamType === "cur"
         ? state.currentTables.map((table) =>

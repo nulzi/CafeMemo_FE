@@ -1,9 +1,9 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, FocusEvent, useState } from "react";
 import Team from "../Team/Team";
 import { ITable } from "../../types";
 import AddButton from "../AddButton/AddButton";
 import { useTypedDispatch } from "../../hooks/redux";
-import { changeTableName } from "../../store/slices/tablesSlice";
+import { changeTableName, deleteTable } from "../../store/slices/tablesSlice";
 
 type TTableProps = {
   table: ITable;
@@ -30,6 +30,25 @@ const Table: FC<TTableProps> = ({ table }) => {
     "핑3",
   ];
 
+  const appearInput = () => {
+    if (!defaultTable.includes(tableName)) setIsChange(true);
+  };
+  const handleEditInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setTableName(e.target.value);
+  };
+  const updateTableName = (e: FocusEvent<HTMLInputElement>) => {
+    if (defaultTable.includes(e.target.value)) {
+      alert("기본 테이블과 이름이 동일할 수 없습니다.");
+      e.target.value = "";
+    } else {
+      dispatch(changeTableName({ tableId, tableName }));
+      setIsChange(false);
+    }
+  };
+  const handleDeleteTable = () => {
+    dispatch(deleteTable({ tableId }));
+  };
+
   return (
     <div
       style={{
@@ -54,23 +73,14 @@ const Table: FC<TTableProps> = ({ table }) => {
           justifyContent: "center",
         }}
       >
-        <div
-          onDoubleClick={() => {
-            if (!defaultTable.includes(tableName)) setIsChange(true);
-          }}
-        >
+        <div onDoubleClick={appearInput}>
           {isChange ? (
             <input
               type="text"
               value={tableName}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setTableName(e.target.value);
-              }}
+              onChange={handleEditInput}
               autoFocus
-              onBlur={() => {
-                dispatch(changeTableName({ tableId, tableName }));
-                setIsChange(false);
-              }}
+              onBlur={updateTableName}
             />
           ) : (
             tableName
@@ -84,6 +94,7 @@ const Table: FC<TTableProps> = ({ table }) => {
               background: "none",
               color: "white",
             }}
+            onClick={handleDeleteTable}
           >
             X
           </button>
