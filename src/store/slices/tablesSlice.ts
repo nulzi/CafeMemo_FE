@@ -33,6 +33,10 @@ type TDeleteTeam = {
   teamId: string;
 };
 
+type TExit = {
+  team: ITeam;
+};
+
 const initialState: TTable = {
   currentTables: [
     {
@@ -208,7 +212,19 @@ const tablesSlice = createSlice({
             (team) => team.teamId !== payload.teamId
           ));
     },
-    exit: () => {},
+    exit: (state, { payload }: PayloadAction<TExit>) => {
+      payload.team.teamType === "cur"
+        ? (state.currentTables = state.currentTables.map((table) => ({
+            ...table,
+            teams: table.teams.filter(
+              (team) => team.teamId !== payload.team.teamId
+            ),
+          })))
+        : (state.waitTeams = state.waitTeams.filter(
+            (team) => team.teamId !== payload.team.teamId
+          ));
+      state.exitTeams.push({ ...payload.team, teamType: "exit" });
+    },
   },
 });
 

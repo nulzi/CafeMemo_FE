@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import { ITeam } from "../../types";
 import { useTypedDispatch, useTypedSelector } from "../../hooks/redux";
-import { deleteTeam, updateTeam } from "../../store/slices/tablesSlice";
+import { deleteTeam, exit, updateTeam } from "../../store/slices/tablesSlice";
 
 type TTeamProps = {
   team: ITeam;
@@ -51,6 +51,9 @@ const Team: FC<TTeamProps> = ({ team }) => {
         teamType: teamData.teamType,
       })
     );
+  };
+  const handleExit = () => {
+    dispatch(exit({ team: teamData }));
   };
 
   return (
@@ -137,7 +140,9 @@ const Team: FC<TTeamProps> = ({ team }) => {
       </div>
       <div style={{ display: "flex", justifyContent: "space-evenly" }}>
         <button onClick={handleDeleteTeam}>삭제하기</button>
-        {teamData.teamType === "exit" ? null : <button>퇴장하기</button>}
+        {teamData.teamType === "exit" ? null : (
+          <button onClick={handleExit}>퇴장하기</button>
+        )}
       </div>
     </div>
   );
