@@ -7,6 +7,11 @@ type TTable = {
   exitTeams: ITeam[];
 };
 
+type TChangeTableName = {
+  tableId: string;
+  tableName: string;
+};
+
 type TAddTeam = {
   teamType: TTeamType;
   team: ITeam;
@@ -140,7 +145,16 @@ const tablesSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
-    addTable: () => {},
+    changeTableName: (state, { payload }: PayloadAction<TChangeTableName>) => {
+      state.currentTables = state.currentTables.map((table) =>
+        table.tableId === payload.tableId
+          ? { ...table, tableName: payload.tableName }
+          : table
+      );
+    },
+    addTable: (state, { payload }: PayloadAction<ITable>) => {
+      state.currentTables.push(payload);
+    },
     deleteTable: () => {},
     addTeam: (state, { payload }: PayloadAction<TAddTeam>) => {
       payload.teamType === "cur"
@@ -190,6 +204,13 @@ const tablesSlice = createSlice({
   },
 });
 
-export const { addTable, deleteTable, addTeam, updateTeam, deleteTeam, exit } =
-  tablesSlice.actions;
+export const {
+  changeTableName,
+  addTable,
+  deleteTable,
+  addTeam,
+  updateTeam,
+  deleteTeam,
+  exit,
+} = tablesSlice.actions;
 export const tablesReducer = tablesSlice.reducer;

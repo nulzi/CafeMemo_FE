@@ -1,14 +1,19 @@
-import React, { FC } from "react";
+import React, { ChangeEvent, FC, useState } from "react";
 import Team from "../Team/Team";
 import { ITable } from "../../types";
 import AddButton from "../AddButton/AddButton";
+import { useTypedDispatch } from "../../hooks/redux";
+import { changeTableName } from "../../store/slices/tablesSlice";
 
 type TTableProps = {
   table: ITable;
 };
 
 const Table: FC<TTableProps> = ({ table }) => {
-  const { tableName, teams } = table;
+  const dispatch = useTypedDispatch();
+  const { tableId, teams } = table;
+  const [isChange, setIsChange] = useState(false);
+  const [tableName, setTableName] = useState(table.tableName);
   const defaultTable = [
     "1",
     "2",
@@ -45,9 +50,32 @@ const Table: FC<TTableProps> = ({ table }) => {
           fontWeight: "bold",
           fontSize: "18px",
           position: "relative",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        {tableName}
+        <div
+          onDoubleClick={() => {
+            if (!defaultTable.includes(tableName)) setIsChange(true);
+          }}
+        >
+          {isChange ? (
+            <input
+              type="text"
+              value={tableName}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                setTableName(e.target.value);
+              }}
+              autoFocus
+              onBlur={() => {
+                dispatch(changeTableName({ tableId, tableName }));
+                setIsChange(false);
+              }}
+            />
+          ) : (
+            tableName
+          )}
+        </div>
         {defaultTable.includes(tableName) ? null : (
           <button
             style={{

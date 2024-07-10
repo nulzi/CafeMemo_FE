@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useTypedDispatch } from "../../hooks/redux";
-import { addTeam } from "../../store/slices/tablesSlice";
+import { addTable, addTeam } from "../../store/slices/tablesSlice";
 import { TTeamType } from "../../types";
 
 type TAddButtonProps = {
@@ -14,6 +14,15 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
 
   const addZero = (time: number) => {
     return time < 10 ? "0" + time : time;
+  };
+  const handleAddTable = () => {
+    dispatch(
+      addTable({
+        tableId: Date.now().toString(),
+        tableName: "new",
+        teams: [],
+      })
+    );
   };
   const handleAddTeam = () => {
     const date = new Date();
@@ -36,7 +45,9 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
 
   return (
     <div>
-      <button onClick={handleAddTeam}>add {type}</button>
+      <button onClick={type === "team" ? handleAddTeam : handleAddTable}>
+        add {type}
+      </button>
     </div>
   );
 };
