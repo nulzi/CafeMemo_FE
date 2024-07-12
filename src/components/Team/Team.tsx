@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useState } from "react";
 import { ITeam } from "../../types";
-import { useTypedDispatch, useTypedSelector } from "../../hooks/redux";
+import { useTypedDispatch } from "../../hooks/redux";
 import { deleteTeam, exit, updateTeam } from "../../store/slices/tablesSlice";
 
 type TTeamProps = {
@@ -27,7 +27,7 @@ const Team: FC<TTeamProps> = ({ team }) => {
 
     setTeamData({
       ...teamData,
-      time: name === "time" ? value : teamData.time,
+      arriveTime: name === "time" ? value : teamData.arriveTime,
       member: name === "member" ? value : teamData.member,
       defaultDrink: name === "defaultDrink" ? value : teamData.defaultDrink,
     });
@@ -100,7 +100,7 @@ const Team: FC<TTeamProps> = ({ team }) => {
             type="time"
             name="time"
             id=""
-            value={teamData.time}
+            value={teamData.arriveTime}
             onChange={handleEditInput}
             onBlur={handleUpdateTeam}
           />

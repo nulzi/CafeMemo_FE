@@ -3,7 +3,8 @@ export type TTeamType = "cur" | "wait" | "exit";
 export interface ITeam {
   teamId: string;
   teamType: TTeamType;
-  time: string;
+  arriveTime: string;
+  exitTime?: string;
   member: string;
   defaultDrink: string;
   orders: string;

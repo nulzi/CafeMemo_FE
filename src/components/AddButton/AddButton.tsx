@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { useTypedDispatch } from "../../hooks/redux";
 import { addTable, addTeam } from "../../store/slices/tablesSlice";
 import { TTeamType } from "../../types";
+import { getFormattedTime } from "../../utils/time";
 
 type TAddButtonProps = {
   type: string;
@@ -12,9 +13,6 @@ type TAddButtonProps = {
 const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
   const dispatch = useTypedDispatch();
 
-  const addZero = (time: number) => {
-    return time < 10 ? "0" + time : time;
-  };
   const handleAddTable = () => {
     dispatch(
       addTable({
@@ -33,7 +31,7 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
         team: {
           teamId: `team-${date}`,
           teamType,
-          time: `${addZero(date.getHours())}:${addZero(date.getMinutes())}`,
+          arriveTime: getFormattedTime(),
           member: "",
           defaultDrink: "",
           orders: "",

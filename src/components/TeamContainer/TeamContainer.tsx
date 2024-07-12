@@ -9,9 +9,6 @@ type TTeamContainerProps = {
 };
 
 const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
-  const waiting = [1, 2, 3, 4, 5, 6];
-  const exit = [1, 2, 3, 4, 5, 6, 7];
-
   return (
     <div
       style={{
@@ -33,10 +30,6 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
           border: "solid 1px red",
           height: "max-content",
           minWidth: 1163,
-          // backgroundColor: "#A08F65",
-          // borderRadius: 7,
-          // padding: 10,
-          // width: 1170,
         }}
       >
         {teams.map((team) => (

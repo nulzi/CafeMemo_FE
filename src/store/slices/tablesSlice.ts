@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ITable, ITeam, TTeamType } from "../../types";
+import { getFormattedTime } from "../../utils/time";
 
 type TTable = {
   currentTables: ITable[];
@@ -46,7 +47,7 @@ const initialState: TTable = {
         {
           teamId: "team-0",
           teamType: "cur",
-          time: "10:30",
+          arriveTime: "10:30",
           member: "눌지 외 어른1",
           defaultDrink: "아아",
           orders: "참치1",
@@ -54,7 +55,7 @@ const initialState: TTable = {
         {
           teamId: "team-1",
           teamType: "cur",
-          time: "10:35",
+          arriveTime: "10:35",
           member: "눌자 외 어른1",
           defaultDrink: "시그",
           orders: "치탕1",
@@ -131,7 +132,7 @@ const initialState: TTable = {
     {
       teamId: "team-2",
       teamType: "wait",
-      time: "11:20",
+      arriveTime: "11:20",
       member: "놀지 외 어른1",
       defaultDrink: "아아",
       orders: "",
@@ -141,7 +142,7 @@ const initialState: TTable = {
     {
       teamId: "team-3",
       teamType: "exit",
-      time: "12:30",
+      arriveTime: "12:30",
       member: "날지 외 어른1",
       defaultDrink: "아아",
       orders: "파스타1",
@@ -223,7 +224,11 @@ const tablesSlice = createSlice({
         : (state.waitTeams = state.waitTeams.filter(
             (team) => team.teamId !== payload.team.teamId
           ));
-      state.exitTeams.push({ ...payload.team, teamType: "exit" });
+      state.exitTeams.push({
+        ...payload.team,
+        teamType: "exit",
+        exitTime: getFormattedTime(),
+      });
     },
   },
 });
