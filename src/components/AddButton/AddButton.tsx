@@ -23,15 +23,13 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
     );
   };
   const handleAddTeam = () => {
-    const date = new Date();
-
     dispatch(
       addTeam({
         teamType,
         team: {
-          teamId: `team-${date}`,
+          teamId: `team-${Date.now()}`,
           teamType,
-          arriveTime: getFormattedTime(),
+          arriveTime: Date.now(),
           member: "",
           defaultDrink: "",
           orders: "",

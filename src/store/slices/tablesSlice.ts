@@ -47,7 +47,7 @@ const initialState: TTable = {
         {
           teamId: "team-0",
           teamType: "cur",
-          arriveTime: "10:30",
+          arriveTime: 1720772111910,
           member: "눌지 외 어른1",
           defaultDrink: "아아",
           orders: "참치1",
@@ -55,7 +55,7 @@ const initialState: TTable = {
         {
           teamId: "team-1",
           teamType: "cur",
-          arriveTime: "10:35",
+          arriveTime: 1720772111917,
           member: "눌자 외 어른1",
           defaultDrink: "시그",
           orders: "치탕1",
@@ -132,7 +132,7 @@ const initialState: TTable = {
     {
       teamId: "team-2",
       teamType: "wait",
-      arriveTime: "11:20",
+      arriveTime: 1720772111915,
       member: "놀지 외 어른1",
       defaultDrink: "아아",
       orders: "",
@@ -142,7 +142,7 @@ const initialState: TTable = {
     {
       teamId: "team-3",
       teamType: "exit",
-      arriveTime: "12:30",
+      arriveTime: 1720772111910,
       member: "날지 외 어른1",
       defaultDrink: "아아",
       orders: "파스타1",
@@ -227,7 +227,7 @@ const tablesSlice = createSlice({
       state.exitTeams.push({
         ...payload.team,
         teamType: "exit",
-        exitTime: getFormattedTime(),
+        exitTime: Date.now(),
       });
     },
   },

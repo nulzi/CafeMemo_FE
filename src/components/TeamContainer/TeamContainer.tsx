@@ -32,9 +32,11 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
           minWidth: 1163,
         }}
       >
-        {teams.map((team) => (
-          <Team key={team.teamId} team={team} />
-        ))}
+        {wait
+          ? teams
+              .sort((a, b) => 0)
+              .map((team) => <Team key={team.teamId} team={team} />)
+          : teams.map((team) => <Team key={team.teamId} team={team} />)}
         {wait ? <AddButton type="team" teamType="wait" /> : null}
       </div>
     </div>

@@ -2,6 +2,7 @@ import React, { ChangeEvent, FC, useState } from "react";
 import { ITeam } from "../../types";
 import { useTypedDispatch } from "../../hooks/redux";
 import { deleteTeam, exit, updateTeam } from "../../store/slices/tablesSlice";
+import { getFormattedTime } from "../../utils/time";
 
 type TTeamProps = {
   team: ITeam;
@@ -24,10 +25,13 @@ const Team: FC<TTeamProps> = ({ team }) => {
 
   const handleEditInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const date = new Date();
 
+    date.setHours(+value.slice(0, 2));
+    date.setMinutes(+value.slice(3));
     setTeamData({
       ...teamData,
-      arriveTime: name === "time" ? value : teamData.arriveTime,
+      arriveTime: name === "time" ? date.getTime() : teamData.arriveTime,
       member: name === "member" ? value : teamData.member,
       defaultDrink: name === "defaultDrink" ? value : teamData.defaultDrink,
     });
@@ -97,10 +101,11 @@ const Team: FC<TTeamProps> = ({ team }) => {
         <div>
           <label>입장시간 : </label>
           <input
+            style={{ minWidth: 100 }}
             type="time"
             name="time"
             id=""
-            value={teamData.arriveTime}
+            value={getFormattedTime(teamData.arriveTime)}
             onChange={handleEditInput}
             onBlur={handleUpdateTeam}
           />
