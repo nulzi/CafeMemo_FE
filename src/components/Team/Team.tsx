@@ -19,13 +19,14 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
     const { name, value } = e.target;
     const date = new Date();
 
-    if (name === "time") {
+    if (name === "arrive" || name === "exit") {
       date.setHours(+value.slice(0, 2));
       date.setMinutes(+value.slice(3));
     }
     setTeamData({
       ...teamData,
-      arriveTime: name === "time" ? date.getTime() : teamData.arriveTime,
+      arriveTime: name === "arrive" ? date.getTime() : teamData.arriveTime,
+      exitTime: name === "exit" ? date.getTime() : teamData.exitTime,
       member: name === "member" ? value : teamData.member,
       defaultDrink: name === "defaultDrink" ? value : teamData.defaultDrink,
     });
@@ -59,7 +60,9 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
     <Draggable draggableId={team.teamId} index={index}>
       {(provided) => (
         <div
-          className={teamData.teamType === "cur" ? "Team" : "Team quaterWidth"}
+          className={
+            teamData.teamType === "cur" ? "TableTeam" : "Team quaterWidth"
+          }
           ref={provided.innerRef}
           {...provided.dragHandleProps}
           {...provided.draggableProps}
@@ -72,17 +75,28 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
             }}
           >
             <div>
-              <label>입장시간 : </label>
+              <label>입장 : </label>
               <input
                 style={{ minWidth: 100 }}
                 type="time"
-                name="time"
-                id=""
+                name="arrive"
                 value={getFormattedTime(teamData.arriveTime)}
                 onChange={handleEditInput}
                 onBlur={handleUpdateTeam}
               />
+              {teamData.teamType === "exit" ? <label> ~ 퇴장 : </label> : null}
+              {teamData.teamType === "exit" ? (
+                <input
+                  style={{ minWidth: 100 }}
+                  type="time"
+                  name="exit"
+                  value={getFormattedTime(teamData.exitTime!)}
+                  onChange={handleEditInput}
+                  onBlur={handleUpdateTeam}
+                />
+              ) : null}
             </div>
+
             <div>
               <label>인원 : </label>
               <input

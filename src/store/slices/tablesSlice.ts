@@ -177,6 +177,7 @@ const initialState: TTable = {
       teamId: "team-3",
       teamType: "exit",
       arriveTime: 1720772111910,
+      exitTime: 1720775121920,
       member: "날지 외 어른1",
       defaultDrink: "아아",
       orders: "파스타1",

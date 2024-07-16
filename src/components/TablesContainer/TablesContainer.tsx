@@ -14,7 +14,9 @@ const TablesContainer: FC<TTablesContainerProps> = ({ tables }) => {
         width: "100%",
       }}
     >
-      <h3 style={{ marginTop: 0, paddingTop: "1em" }}>현재 테이블</h3>
+      <h2 style={{ marginTop: 0, paddingTop: "1em", textAlign: "center" }}>
+        현재 테이블
+      </h2>
       <div
         style={{
           display: "flex",
@@ -22,7 +24,7 @@ const TablesContainer: FC<TTablesContainerProps> = ({ tables }) => {
           gap: "10px 1%",
           // border: "solid 1px red",
           height: "max-content",
-          padding: "20px 7px 30px 10px",
+          padding: "20px 10px 30px",
           minWidth: 1163,
           // width: 1170,
         }}
