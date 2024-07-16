@@ -4,6 +4,7 @@ import { ITable } from "../../types";
 import AddButton from "../AddButton/AddButton";
 import { useTypedDispatch } from "../../hooks/redux";
 import { changeTableName, deleteTable } from "../../store/slices/tablesSlice";
+import { Droppable } from "react-beautiful-dnd";
 
 type TTableProps = {
   table: ITable;
@@ -50,63 +51,71 @@ const Table: FC<TTableProps> = ({ table }) => {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        rowGap: 5,
-        // border: "solid 1px #0AE93B",
-        borderRadius: 7,
-        backgroundColor: "#4C4637",
-        color: "white",
-        padding: "10px 7px",
-        width: "23%",
-      }}
-    >
-      <div
-        style={{
-          textAlign: "center",
-          fontWeight: "bold",
-          fontSize: "18px",
-          position: "relative",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div onDoubleClick={appearInput}>
-          {isChange ? (
-            <input
-              type="text"
-              value={tableName}
-              onChange={handleEditInput}
-              autoFocus
-              onBlur={updateTableName}
-            />
-          ) : (
-            tableName
-          )}
-        </div>
-        {defaultTable.includes(tableName) ? null : (
-          <button
+    <Droppable droppableId={tableId}>
+      {(provided) => (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            rowGap: 5,
+            // border: "solid 1px #0AE93B",
+            borderRadius: 7,
+            backgroundColor: "#4C4637",
+            color: "white",
+            padding: "10px 7px",
+            width: "23%",
+          }}
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          <div
             style={{
-              position: "absolute",
-              right: 0,
-              background: "none",
-              color: "white",
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: "18px",
+              position: "relative",
+              display: "flex",
+              justifyContent: "center",
             }}
-            onClick={handleDeleteTable}
           >
-            X
-          </button>
-        )}
-      </div>
-      {teams.map((team) => (
-        <Team key={team.teamId} team={team} />
-      ))}
-      <div style={{ textAlign: "center" }}>
-        <AddButton type={"team"} teamType="cur" tableName={tableName} />
-      </div>
-    </div>
+            <div onDoubleClick={appearInput}>
+              {isChange ? (
+                <input
+                  type="text"
+                  value={tableName}
+                  onChange={handleEditInput}
+                  autoFocus
+                  onBlur={updateTableName}
+                />
+              ) : (
+                tableName
+              )}
+            </div>
+            {defaultTable.includes(tableName) ? null : (
+              <button
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  background: "none",
+                  color: "white",
+                }}
+                onClick={handleDeleteTable}
+              >
+                X
+              </button>
+            )}
+          </div>
+          <div style={{ width: "1px", height: "10px" }}></div>
+          {teams.map((team, i) => (
+            <Team key={team.teamId} team={team} index={i} />
+          ))}
+          {provided.placeholder}
+          <div style={{ textAlign: "center" }}>
+            <AddButton type={"team"} teamType="cur" tableName={tableName} />
+          </div>
+        </div>
+      )}
+    </Droppable>
   );
 };
 

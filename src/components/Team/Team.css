@@ -1,0 +1,14 @@
+.Team {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  background-color: #fad200;
+  border-radius: 3px;
+  color: black;
+  padding: 12px 10px;
+  margin: 3px 8px;
+}
+
+.quarterWidth {
+  width: 22.5%;
+}

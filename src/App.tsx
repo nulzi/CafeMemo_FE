@@ -2,18 +2,38 @@ import React from "react";
 import "./App.css";
 import TablesContainer from "./components/TablesContainer/TablesContainer";
 import TeamContainer from "./components/TeamContainer/TeamContainer";
-import { useTypedSelector } from "./hooks/redux";
+import { useTypedDispatch, useTypedSelector } from "./hooks/redux";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { moveTeam } from "./store/slices/tablesSlice";
 
 function App() {
+  const dispatch = useTypedDispatch();
   const { currentTables, waitTeams, exitTeams } = useTypedSelector(
     (state) => state.tables
   );
 
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    console.log(result);
+    if (!destination) return;
+
+    dispatch(
+      moveTeam({
+        droppableIdStart: source.droppableId,
+        droppableIdEnd: destination.droppableId,
+        droppableIndexStart: source.index,
+        droppableIndexEnd: destination.index,
+      })
+    );
+  };
+
   return (
     <div className="App">
-      <TablesContainer tables={currentTables} />
-      <TeamContainer wait teams={waitTeams} />
-      <TeamContainer teams={exitTeams} />
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <TablesContainer tables={currentTables} />
+        <TeamContainer wait teams={waitTeams} />
+        <TeamContainer teams={exitTeams} />
+      </DragDropContext>
     </div>
   );
 }

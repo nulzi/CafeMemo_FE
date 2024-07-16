@@ -16,7 +16,7 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
   const handleAddTable = () => {
     dispatch(
       addTable({
-        tableId: Date.now().toString(),
+        tableId: `table-${Date.now()}`,
         tableName: "new",
         teams: [],
       })

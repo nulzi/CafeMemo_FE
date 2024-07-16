@@ -38,6 +38,13 @@ type TExit = {
   team: ITeam;
 };
 
+type TMoveTeam = {
+  droppableIdStart: string;
+  droppableIdEnd: string;
+  droppableIndexStart: number;
+  droppableIndexEnd: number;
+};
+
 const initialState: TTable = {
   currentTables: [
     {
@@ -65,7 +72,16 @@ const initialState: TTable = {
     {
       tableId: "table-1",
       tableName: "2",
-      teams: [],
+      teams: [
+        {
+          teamId: "team-4",
+          teamType: "cur",
+          arriveTime: 1720772111917,
+          member: "눌자 외 어른1",
+          defaultDrink: "시그",
+          orders: "치탕1",
+        },
+      ],
     },
     {
       tableId: "table-13",
@@ -110,7 +126,16 @@ const initialState: TTable = {
     {
       tableId: "table-9",
       tableName: "파티룸",
-      teams: [],
+      teams: [
+        // {
+        //   teamId: "team-4",
+        //   teamType: "cur",
+        //   arriveTime: 0,
+        //   member: "",
+        //   defaultDrink: "",
+        //   orders: "",
+        // },
+      ],
     },
     {
       tableId: "table-10",
@@ -125,7 +150,16 @@ const initialState: TTable = {
     {
       tableId: "table-12",
       tableName: "핑3",
-      teams: [],
+      teams: [
+        // {
+        //   teamId: "team-5",
+        //   teamType: "cur",
+        //   arriveTime: 0,
+        //   member: "",
+        //   defaultDrink: "",
+        //   orders: "",
+        // },
+      ],
     },
   ],
   waitTeams: [
@@ -229,6 +263,43 @@ const tablesSlice = createSlice({
         teamType: "exit",
         exitTime: Date.now(),
       });
+      state.exitTeams.sort((a, b) => b.exitTime! - a.exitTime!);
+    },
+    moveTeam: (state, { payload }: PayloadAction<TMoveTeam>) => {
+      if (
+        payload.droppableIdStart === "waitTeams" &&
+        payload.droppableIdEnd.includes("table")
+      ) {
+        // wait -> table
+        const movedTeam = state.waitTeams.splice(
+          payload.droppableIndexStart,
+          1
+        )[0];
+        const addedTable = state.currentTables.find(
+          (table) => table.tableId === payload.droppableIdEnd
+        );
+        addedTable?.teams.splice(payload.droppableIndexEnd, 0, {
+          ...movedTeam!,
+          teamType: "cur",
+        });
+      }
+      if (
+        payload.droppableIdStart.includes("table") &&
+        payload.droppableIdEnd.includes("table")
+      ) {
+        // move team in table
+        const movedTable = state.currentTables.find(
+          (table) => table.tableId === payload.droppableIdStart
+        );
+        const movedTeam = movedTable?.teams.splice(
+          payload.droppableIndexStart,
+          1
+        )[0];
+        const addedTable = state.currentTables.find(
+          (table) => table.tableId === payload.droppableIdEnd
+        );
+        addedTable?.teams.splice(payload.droppableIndexEnd, 0, movedTeam!);
+      }
     },
   },
 });
@@ -241,5 +312,6 @@ export const {
   updateTeam,
   deleteTeam,
   exit,
+  moveTeam,
 } = tablesSlice.actions;
 export const tablesReducer = tablesSlice.reducer;

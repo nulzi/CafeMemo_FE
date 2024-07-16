@@ -20,7 +20,7 @@ const TablesContainer: FC<TTablesContainerProps> = ({ tables }) => {
           display: "flex",
           flexWrap: "wrap",
           gap: "10px 1%",
-          border: "solid 1px red",
+          // border: "solid 1px red",
           height: "max-content",
           padding: "20px 7px 30px 10px",
           minWidth: 1163,
