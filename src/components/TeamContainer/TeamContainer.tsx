@@ -21,10 +21,23 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
     data += "=".repeat(30);
     teams.forEach((team) => {
       const arriveTime = new Date(team.arriveTime);
-      data += `\n${arriveTime.getHours()}:${arriveTime.getMinutes()}(${
+      let pay = "";
+      if (team.cash) pay += `${team.cash.toLocaleString()}원 현금 / `;
+      if (team.card) pay += `${team.card.toLocaleString()}원 카드 / `;
+      if (team.point.use) pay += `${team.point.use.toLocaleString()}p 차감 / `;
+      if (team.point.card)
+        pay += `${team.point.card.toLocaleString()}p 카드충전 / `;
+      if (team.point.cash)
+        pay += `${team.point.cash.toLocaleString()}p 현금충전 ${
+          team.point.isTransfer ? "★계좌이체" : null
+        }/ `;
+
+      data += `\n${arriveTime.getHours()}:${arriveTime.getMinutes()}(${pay}${
         team.defaultDrink
       })\n${team.member}\n`;
+
       if (team.orders) data += `${team.orders}\n`;
+
       data += "-".repeat(50);
     });
 

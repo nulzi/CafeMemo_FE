@@ -58,6 +58,14 @@ const initialState: TTable = {
           member: "눌지 외 어른1",
           defaultDrink: "아아",
           orders: "참치1",
+          cash: 0,
+          card: 0,
+          point: {
+            isTransfer: false,
+            use: 0,
+            cash: 0,
+            card: 0,
+          },
         },
         {
           teamId: "team-1",
@@ -66,6 +74,14 @@ const initialState: TTable = {
           member: "눌자 외 어른1",
           defaultDrink: "시그",
           orders: "치탕1",
+          cash: 0,
+          card: 0,
+          point: {
+            isTransfer: false,
+            use: 0,
+            cash: 0,
+            card: 0,
+          },
         },
       ],
     },
@@ -80,6 +96,14 @@ const initialState: TTable = {
           member: "눌자 외 어른1",
           defaultDrink: "시그",
           orders: "치탕1",
+          cash: 0,
+          card: 0,
+          point: {
+            isTransfer: false,
+            use: 0,
+            cash: 0,
+            card: 0,
+          },
         },
       ],
     },
@@ -126,16 +150,7 @@ const initialState: TTable = {
     {
       tableId: "table-9",
       tableName: "파티룸",
-      teams: [
-        // {
-        //   teamId: "team-4",
-        //   teamType: "cur",
-        //   arriveTime: 0,
-        //   member: "",
-        //   defaultDrink: "",
-        //   orders: "",
-        // },
-      ],
+      teams: [],
     },
     {
       tableId: "table-10",
@@ -150,16 +165,7 @@ const initialState: TTable = {
     {
       tableId: "table-12",
       tableName: "핑3",
-      teams: [
-        // {
-        //   teamId: "team-5",
-        //   teamType: "cur",
-        //   arriveTime: 0,
-        //   member: "",
-        //   defaultDrink: "",
-        //   orders: "",
-        // },
-      ],
+      teams: [],
     },
   ],
   waitTeams: [
@@ -170,6 +176,14 @@ const initialState: TTable = {
       member: "놀지 외 어른1",
       defaultDrink: "아아",
       orders: "",
+      cash: 0,
+      card: 0,
+      point: {
+        isTransfer: false,
+        use: 0,
+        cash: 0,
+        card: 0,
+      },
     },
   ],
   exitTeams: [
@@ -181,6 +195,14 @@ const initialState: TTable = {
       member: "날지 외 어른1",
       defaultDrink: "아아",
       orders: "파스타1",
+      cash: 10000,
+      card: 0,
+      point: {
+        isTransfer: true,
+        use: 2000,
+        cash: 57500,
+        card: 0,
+      },
     },
   ],
 };

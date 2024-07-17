@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { useTypedDispatch } from "../../hooks/redux";
 import { addTable, addTeam } from "../../store/slices/tablesSlice";
 import { TTeamType } from "../../types";
-import { getFormattedTime } from "../../utils/time";
 
 type TAddButtonProps = {
   type: string;
@@ -33,6 +32,14 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
           member: "",
           defaultDrink: "",
           orders: "",
+          cash: 0,
+          card: 0,
+          point: {
+            isTransfer: false,
+            use: 0,
+            cash: 0,
+            card: 0,
+          },
         },
         tableName,
       })
