@@ -8,8 +8,11 @@ export interface ITeam {
   member: string;
   defaultDrink: string;
   orders: string;
-  cash: number;
-  card: number;
+  pay: {
+    isTransfer: boolean; // 계좌이체 여부
+    cash: number;
+    card: number;
+  };
   point: {
     isTransfer: boolean; // 계좌이체 여부
     use: number;

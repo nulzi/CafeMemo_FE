@@ -105,14 +105,15 @@ const Table: FC<TTableProps> = ({ table }) => {
               </button>
             )}
           </div>
-          <div style={{ width: "1px", height: "10px" }}></div>
-          {teams.map((team, i) => (
-            <Team key={team.teamId} team={team} index={i} />
-          ))}
+          {teams.length ? (
+            teams.map((team, i) => (
+              <Team key={team.teamId} team={team} index={i} />
+            ))
+          ) : (
+            <div style={{ width: 1, height: 30 }} />
+          )}
           {provided.placeholder}
-          <div style={{ textAlign: "center" }}>
-            <AddButton type={"team"} teamType="cur" tableName={tableName} />
-          </div>
+          <AddButton type={"team"} teamType="cur" tableName={tableName} />
         </div>
       )}
     </Droppable>

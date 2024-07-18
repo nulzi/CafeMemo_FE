@@ -32,9 +32,7 @@ const TablesContainer: FC<TTablesContainerProps> = ({ tables }) => {
         {tables.map((table) => (
           <Table key={table.tableId} table={table} />
         ))}
-        <div>
-          <AddButton type={"table"} teamType="exit" />
-        </div>
+        <AddButton type={"table"} teamType="exit" />
       </div>
     </div>
   );

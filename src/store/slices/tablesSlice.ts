@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ITable, ITeam, TTeamType } from "../../types";
-import { getFormattedTime } from "../../utils/time";
 
 type TTable = {
   currentTables: ITable[];
@@ -58,8 +57,11 @@ const initialState: TTable = {
           member: "눌지 외 어른1",
           defaultDrink: "아아",
           orders: "참치1",
-          cash: 0,
-          card: 0,
+          pay: {
+            isTransfer: false,
+            cash: 10000,
+            card: 0,
+          },
           point: {
             isTransfer: false,
             use: 0,
@@ -74,8 +76,11 @@ const initialState: TTable = {
           member: "눌자 외 어른1",
           defaultDrink: "시그",
           orders: "치탕1",
-          cash: 0,
-          card: 0,
+          pay: {
+            isTransfer: false,
+            cash: 10000,
+            card: 0,
+          },
           point: {
             isTransfer: false,
             use: 0,
@@ -96,8 +101,11 @@ const initialState: TTable = {
           member: "눌자 외 어른1",
           defaultDrink: "시그",
           orders: "치탕1",
-          cash: 0,
-          card: 0,
+          pay: {
+            isTransfer: false,
+            cash: 10000,
+            card: 0,
+          },
           point: {
             isTransfer: false,
             use: 0,
@@ -176,8 +184,11 @@ const initialState: TTable = {
       member: "놀지 외 어른1",
       defaultDrink: "아아",
       orders: "",
-      cash: 0,
-      card: 0,
+      pay: {
+        isTransfer: false,
+        cash: 10000,
+        card: 0,
+      },
       point: {
         isTransfer: false,
         use: 0,
@@ -195,8 +206,11 @@ const initialState: TTable = {
       member: "날지 외 어른1",
       defaultDrink: "아아",
       orders: "파스타1",
-      cash: 10000,
-      card: 0,
+      pay: {
+        isTransfer: false,
+        cash: 10000,
+        card: 0,
+      },
       point: {
         isTransfer: true,
         use: 2000,
@@ -211,6 +225,9 @@ const tablesSlice = createSlice({
   name: "table",
   initialState,
   reducers: {
+    init: (state) => {
+      localStorage.setItem("initialState", JSON.stringify(initialState));
+    },
     changeTableName: (state, { payload }: PayloadAction<TChangeTableName>) => {
       state.currentTables = state.currentTables.map((table) =>
         table.tableId === payload.tableId
@@ -328,6 +345,7 @@ const tablesSlice = createSlice({
 });
 
 export const {
+  init,
   changeTableName,
   addTable,
   deleteTable,

@@ -4,6 +4,8 @@ import { useTypedDispatch } from "../../hooks/redux";
 import { deleteTeam, exit, updateTeam } from "../../store/slices/tablesSlice";
 import { getFormattedTime } from "../../utils/time";
 import { Draggable } from "react-beautiful-dnd";
+import { HiTrash, HiOutlineLogout, HiCreditCard, HiCash } from "react-icons/hi";
+import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import "./Team.css";
 
 type TTeamProps = {
@@ -13,6 +15,7 @@ type TTeamProps = {
 
 const Team: FC<TTeamProps> = ({ team, index }) => {
   const [teamData, setTeamData] = useState(team);
+  const [isOpen, setIsOpen] = useState(false);
   const dispatch = useTypedDispatch();
 
   const handleEditInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -24,17 +27,30 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
       date.setHours(+value.slice(0, 2));
       date.setMinutes(+value.slice(3));
     }
-    setTeamData({
+
+    const newTeamData = {
       ...teamData,
       arriveTime: name === "arrive" ? date.getTime() : teamData.arriveTime,
       exitTime: name === "exit" ? date.getTime() : teamData.exitTime,
       member: name === "member" ? value : teamData.member,
       defaultDrink: name === "defaultDrink" ? value : teamData.defaultDrink,
-      card: name === "card" ? parseInt(value.replace(",", "")) : teamData.card,
-      cash: name === "cash" ? parseInt(value.replace(",", "")) : teamData.cash,
+      pay: {
+        isTransfer:
+          name === "isPayTransfer"
+            ? !teamData.pay.isTransfer
+            : teamData.pay.isTransfer,
+        card:
+          name === "card"
+            ? parseInt(value.replace(",", ""))
+            : teamData.pay.card,
+        cash:
+          name === "cash"
+            ? parseInt(value.replace(",", ""))
+            : teamData.pay.cash,
+      },
       point: {
         isTransfer:
-          name === "isTransfer"
+          name === "isPointTransfer"
             ? !teamData.point.isTransfer
             : teamData.point.isTransfer,
         use:
@@ -50,10 +66,39 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
             ? parseInt(value.replace(",", ""))
             : teamData.point.card,
       },
-    });
+    };
+    setTeamData(newTeamData);
   };
   const handleEditTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setTeamData({ ...teamData, orders: e.target.value });
+  };
+  const handleEditCheckbox = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name } = e.target;
+    handleEditInput(e);
+    // Q. 억지 동작 느낌쓰..
+    dispatch(
+      updateTeam({
+        teamId: teamData.teamId,
+        teamType: teamData.teamType,
+        team: {
+          ...teamData,
+          pay: {
+            ...teamData.pay,
+            isTransfer:
+              name === "isPayTransfer"
+                ? !teamData.pay.isTransfer
+                : teamData.pay.isTransfer,
+          },
+          point: {
+            ...teamData.point,
+            isTransfer:
+              name === "isPointTransfer"
+                ? !teamData.point.isTransfer
+                : teamData.point.isTransfer,
+          },
+        },
+      })
+    );
   };
   const handleUpdateTeam = () => {
     dispatch(
@@ -74,6 +119,9 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
   };
   const handleExit = () => {
     dispatch(exit({ team: teamData }));
+  };
+  const handleOpen = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -102,7 +150,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
             >
               이용 내역
             </div>
-            <div>
+            <div style={{ display: "flex", columnGap: 3 }}>
               <label>입장</label>
               <input
                 style={{ minWidth: 100 }}
@@ -126,7 +174,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 </>
               ) : null}
             </div>
-            <div>
+            <div style={{ display: "flex", columnGap: 3 }}>
               <label>인원</label>
               <input
                 type="text"
@@ -137,8 +185,8 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 onBlur={handleUpdateTeam}
               />
             </div>
-            <div>
-              <label>기본 음료</label>
+            <div style={{ display: "flex", columnGap: 3 }}>
+              <label>기본음료</label>
               <input
                 type="text"
                 name="defaultDrink"
@@ -148,7 +196,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 onBlur={handleUpdateTeam}
               />
             </div>
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", columnGap: 3 }}>
               <label>주문</label>
               <textarea
                 name="orders"
@@ -159,87 +207,134 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 onBlur={handleUpdateTeam}
               />
             </div>
-            {teamData.teamType === "exit" ? (
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "10px",
+                paddingTop: "10px",
+                fontWeight: 600,
+                borderTop: "1px dashed black",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={handleOpen}
+            >
+              결제 내역
+              {teamData.teamType === "exit" ? null : isOpen ? (
+                <IoMdArrowDropdown style={{ width: 25, height: 25 }} />
+              ) : (
+                <IoMdArrowDropup style={{ width: 25, height: 25 }} />
+              )}
+            </div>
+            {teamData.teamType === "exit" || isOpen ? (
               <>
-                <div
-                  style={{
-                    textAlign: "center",
-                    marginTop: "10px",
-                    paddingTop: "10px",
-                    fontWeight: 600,
-                    borderTop: "1px dashed black",
-                  }}
-                >
-                  결제 내역
-                </div>
-                <div>
-                  <label>카드</label>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <HiCreditCard style={{ width: 20, height: 20 }} />
                   <input
                     type="text"
                     name="card"
                     id=""
-                    value={teamData.card ? teamData.card.toLocaleString() : 0}
+                    value={
+                      teamData.pay.card ? teamData.pay.card.toLocaleString() : 0
+                    }
                     onChange={handleEditInput}
                     onBlur={handleUpdateTeam}
                     style={{ textAlign: "right" }}
                   />
                   원
                 </div>
-                <div>
-                  <label>현금</label>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <HiCash style={{ width: 20, height: 20 }} />
                   <input
                     type="text"
                     name="cash"
                     id=""
-                    value={teamData.cash ? teamData.cash.toLocaleString() : 0}
+                    value={
+                      teamData.pay.cash ? teamData.pay.cash.toLocaleString() : 0
+                    }
                     onChange={handleEditInput}
                     onBlur={handleUpdateTeam}
                     style={{ textAlign: "right" }}
                   />
                   원
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      name="isPayTransfer"
+                      id=""
+                      checked={teamData.pay.isTransfer}
+                      onChange={handleEditCheckbox}
+                      style={{ width: 18, height: 18 }}
+                    />
+                    <div style={{ fontSize: "0.8rem" }}>이체</div>
+                  </div>
                 </div>
-                <div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: 2,
+                  }}
+                >
                   <label>포인트 충전</label>
-                  <br />
-                  카드{" "}
-                  <input
-                    type="text"
-                    name="cardPoint"
-                    id=""
-                    value={
-                      teamData.point.card
-                        ? teamData.point.card.toLocaleString()
-                        : 0
-                    }
-                    onChange={handleEditInput}
-                    onBlur={handleUpdateTeam}
-                    style={{ textAlign: "right" }}
-                  />
-                  p
-                  <br />
-                  현금{" "}
-                  <input
-                    type="text"
-                    name="cashPoint"
-                    id=""
-                    value={
-                      teamData.point.cash
-                        ? teamData.point.cash.toLocaleString()
-                        : 0
-                    }
-                    onChange={handleEditInput}
-                    onBlur={handleUpdateTeam}
-                    style={{ textAlign: "right" }}
-                  />
-                  p
-                  <input
-                    type="checkbox"
-                    name="isTransfer"
-                    id=""
-                    checked={teamData.point.isTransfer}
-                    onChange={handleEditInput}
-                  />
-                  이체
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <HiCreditCard style={{ width: 20, height: 20 }} />
+                    <input
+                      type="text"
+                      name="cardPoint"
+                      id=""
+                      value={
+                        teamData.point.card
+                          ? teamData.point.card.toLocaleString()
+                          : 0
+                      }
+                      onChange={handleEditInput}
+                      onBlur={handleUpdateTeam}
+                      style={{ textAlign: "right" }}
+                    />
+                    p
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <HiCash style={{ width: 20, height: 20 }} />
+                    <input
+                      type="text"
+                      name="cashPoint"
+                      id=""
+                      value={
+                        teamData.point.cash
+                          ? teamData.point.cash.toLocaleString()
+                          : 0
+                      }
+                      onChange={handleEditInput}
+                      onBlur={handleUpdateTeam}
+                      style={{ textAlign: "right" }}
+                    />
+                    p
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name="isPointTransfer"
+                        id=""
+                        checked={teamData.point.isTransfer}
+                        onChange={handleEditCheckbox}
+                        style={{ width: 18, height: 18 }}
+                      />
+                      <div style={{ fontSize: "0.8rem" }}>이체</div>
+                    </div>
+                  </div>
                 </div>
                 <div>
                   <label>사용 포인트</label>
@@ -262,9 +357,19 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
             ) : null}
           </div>
           <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <button onClick={handleDeleteTeam}>삭제하기</button>
+            <div className="iconContainer" style={{ marginRight: "10px" }}>
+              <HiTrash
+                style={{ width: "100%", height: "100%" }}
+                onClick={handleDeleteTeam}
+              />
+            </div>
             {teamData.teamType === "exit" ? null : (
-              <button onClick={handleExit}>퇴장하기</button>
+              <div className="iconContainer" style={{ marginLeft: "10px" }}>
+                <HiOutlineLogout
+                  style={{ width: "100%", height: "100%" }}
+                  onClick={handleExit}
+                />
+              </div>
             )}
           </div>
         </div>

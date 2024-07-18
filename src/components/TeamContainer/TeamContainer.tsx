@@ -3,6 +3,7 @@ import Team from "../Team/Team";
 import AddButton from "../AddButton/AddButton";
 import { ITeam } from "../../types";
 import { Droppable } from "react-beautiful-dnd";
+import { HiDocumentDownload } from "react-icons/hi";
 
 type TTeamContainerProps = {
   wait?: boolean;
@@ -22,14 +23,17 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
     teams.forEach((team) => {
       const arriveTime = new Date(team.arriveTime);
       let pay = "";
-      if (team.cash) pay += `${team.cash.toLocaleString()}원 현금 / `;
-      if (team.card) pay += `${team.card.toLocaleString()}원 카드 / `;
+      if (team.pay.card) pay += `${team.pay.card.toLocaleString()}원 카드 / `;
+      if (team.pay.cash)
+        pay += `${team.pay.cash.toLocaleString()}원 현금 ${
+          team.pay.isTransfer ? "★계좌이체" : ""
+        }/ `;
       if (team.point.use) pay += `${team.point.use.toLocaleString()}p 차감 / `;
       if (team.point.card)
         pay += `${team.point.card.toLocaleString()}p 카드충전 / `;
       if (team.point.cash)
         pay += `${team.point.cash.toLocaleString()}p 현금충전 ${
-          team.point.isTransfer ? "★계좌이체" : null
+          team.point.isTransfer ? "★계좌이체" : ""
         }/ `;
 
       data += `\n${arriveTime.getHours()}:${arriveTime.getMinutes()}(${pay}${
@@ -76,12 +80,16 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
               {wait ? "대기" : "퇴장"}
             </h2>
             {wait ? null : (
-              <button
-                style={{ position: "absolute", top: 0, right: 0 }}
+              <HiDocumentDownload
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
+                  width: 40,
+                  height: 40,
+                }}
                 onClick={handleDownloadTextFile}
-              >
-                텍스트 파일로 다운로드
-              </button>
+              />
             )}
           </div>
           <div
@@ -95,11 +103,11 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
               minWidth: 1163,
             }}
           >
+            {wait ? <AddButton type="team" teamType="wait" /> : null}
             {teams.map((team, i) => (
               <Team key={team.teamId} team={team} index={i} />
             ))}
             {provided.placeholder}
-            {wait ? <AddButton type="team" teamType="wait" /> : null}
           </div>
         </div>
       )}

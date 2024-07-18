@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import { useTypedDispatch } from "../../hooks/redux";
 import { addTable, addTeam } from "../../store/slices/tablesSlice";
 import { TTeamType } from "../../types";
+import { HiSquaresPlus, HiUserPlus } from "react-icons/hi2";
+import "./AddButton.css";
 
 type TAddButtonProps = {
   type: string;
@@ -32,8 +34,11 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
           member: "",
           defaultDrink: "",
           orders: "",
-          cash: 0,
-          card: 0,
+          pay: {
+            isTransfer: false,
+            cash: 0,
+            card: 0,
+          },
           point: {
             isTransfer: false,
             use: 0,
@@ -46,11 +51,24 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
     );
   };
 
-  return (
-    <div>
-      <button onClick={type === "team" ? handleAddTeam : handleAddTable}>
-        add {type}
-      </button>
+  return type === "team" ? (
+    <div className="container add-team" onClick={handleAddTeam}>
+      <HiUserPlus
+        style={{
+          width: "30px",
+          height: "30px",
+        }}
+      />
+    </div>
+  ) : (
+    <div className="container add-table">
+      <HiSquaresPlus
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+        onClick={handleAddTable}
+      />
     </div>
   );
 };

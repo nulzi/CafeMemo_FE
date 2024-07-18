@@ -16,8 +16,16 @@
 - get data to .txt file
 - 퇴장 시 퇴장 시간 표시
 - add 지불된 비용 및 사용된 포인트 input
+- change text to icon(react-icons)
+- design
+  - hover, input, box
 
 ### To be added
+
+- design
+  - add reset css
+  - animation1 : 대기에서 테이블로 옮길 때 배경색 물드는 애니메이션
+- offline : 메모장처럼 오프라인에서 사용가능하도록 기능
 
 ### To be modified
 
@@ -34,11 +42,6 @@
 - check order : 주문이 나갔는지 확인하는 기능
 - calculate : 주문 금액 계산 기능
   - add price data : 결제된 최종 금액 계산을 위한 메뉴 가격 데이터 추가
-- offline : 메모장처럼 오프라인에서 사용가능하도록 기능
 - sort table : 테이블 생성 후 순서대로 정렬
-- design
-  - hover, input, box
-  - add reset css
-  - animation1 : 대기에서 테이블로 옮길 때 배경색 물드는 애니메이션
 - backend: collect data, caculate data etc
 - log

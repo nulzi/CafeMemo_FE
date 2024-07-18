@@ -8,6 +8,7 @@
   padding: 12px 10px;
   margin: 3px 8px;
   box-sizing: border-box;
+  min-width: 295px;
 }
 
 .Team {
@@ -20,6 +21,7 @@
   padding: 12px 10px;
   margin: 3px 8px;
   box-sizing: border-box;
+  min-width: 320px;
 }
 
 .quarterWidth {
@@ -27,4 +29,33 @@
 }
 
 .TableTeam:hover .Team:hover {
+  cursor: move;
+  transform: scale(1.2);
+  background-color: black;
+}
+
+.iconContainer {
+  width: 25px;
+  height: 25px;
+}
+
+.iconContainer:hover {
+  transform: scale(1.5);
+}
+
+input,
+textarea {
+  border: none;
+  border-bottom: 1px solid black;
+  font-size: 1.05rem;
+}
+
+.TableTeam input,
+.TableTeam textarea {
+  background-color: #fad200;
+}
+
+.Team input,
+.Team textarea {
+  background-color: #ffc74e;
 }
