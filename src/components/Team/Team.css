@@ -8,7 +8,6 @@
   padding: 12px 10px;
   margin: 3px 8px;
   box-sizing: border-box;
-  min-width: 295px;
 }
 
 .Team {
@@ -41,6 +40,17 @@
 
 .iconContainer:hover {
   transform: scale(1.5);
+}
+
+.input {
+  display: flex;
+  align-items: center;
+  column-gap: 3;
+  flex-wrap: wrap;
+  input {
+    /* min-width: 122px; */
+    max-width: 190px;
+  }
 }
 
 input,

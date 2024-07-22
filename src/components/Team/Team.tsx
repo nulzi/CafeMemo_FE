@@ -150,7 +150,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
             >
               이용 내역
             </div>
-            <div style={{ display: "flex", columnGap: 3 }}>
+            <div className="input">
               <label>입장</label>
               <input
                 style={{ minWidth: 100 }}
@@ -174,7 +174,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 </>
               ) : null}
             </div>
-            <div style={{ display: "flex", columnGap: 3 }}>
+            <div className="input">
               <label>인원</label>
               <input
                 type="text"
@@ -185,7 +185,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 onBlur={handleUpdateTeam}
               />
             </div>
-            <div style={{ display: "flex", columnGap: 3 }}>
+            <div className="input">
               <label>기본음료</label>
               <input
                 type="text"
@@ -196,7 +196,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                 onBlur={handleUpdateTeam}
               />
             </div>
-            <div style={{ display: "flex", columnGap: 3 }}>
+            <div className="input">
               <label>주문</label>
               <textarea
                 name="orders"
@@ -229,7 +229,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
             </div>
             {teamData.teamType === "exit" || isOpen ? (
               <>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="input">
                   <HiCreditCard style={{ width: 20, height: 20 }} />
                   <input
                     type="text"
@@ -244,36 +244,47 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                   />
                   원
                 </div>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div className="input">
                   <HiCash style={{ width: 20, height: 20 }} />
-                  <input
-                    type="text"
-                    name="cash"
-                    id=""
-                    value={
-                      teamData.pay.cash ? teamData.pay.cash.toLocaleString() : 0
-                    }
-                    onChange={handleEditInput}
-                    onBlur={handleUpdateTeam}
-                    style={{ textAlign: "right" }}
-                  />
-                  원
                   <div
                     style={{
                       display: "flex",
-                      flexDirection: "column",
                       alignItems: "center",
                     }}
                   >
                     <input
-                      type="checkbox"
-                      name="isPayTransfer"
+                      type="text"
+                      name="cash"
                       id=""
-                      checked={teamData.pay.isTransfer}
-                      onChange={handleEditCheckbox}
-                      style={{ width: 18, height: 18 }}
+                      value={
+                        teamData.pay.cash
+                          ? teamData.pay.cash.toLocaleString()
+                          : 0
+                      }
+                      onChange={handleEditInput}
+                      onBlur={handleUpdateTeam}
+                      style={{ textAlign: "right" }}
                     />
-                    <div style={{ fontSize: "0.8rem" }}>이체</div>
+                    원
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name="isPayTransfer"
+                        id=""
+                        checked={teamData.pay.isTransfer}
+                        onChange={handleEditCheckbox}
+                        style={{ width: 18, height: 18 }}
+                      />
+                      <div style={{ fontSize: "0.8rem", minWidth: 26 }}>
+                        이체
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div
@@ -284,7 +295,7 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                   }}
                 >
                   <label>포인트 충전</label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div className="input">
                     <HiCreditCard style={{ width: 20, height: 20 }} />
                     <input
                       type="text"
@@ -301,38 +312,47 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                     />
                     p
                   </div>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div className="input">
                     <HiCash style={{ width: 20, height: 20 }} />
-                    <input
-                      type="text"
-                      name="cashPoint"
-                      id=""
-                      value={
-                        teamData.point.cash
-                          ? teamData.point.cash.toLocaleString()
-                          : 0
-                      }
-                      onChange={handleEditInput}
-                      onBlur={handleUpdateTeam}
-                      style={{ textAlign: "right" }}
-                    />
-                    p
                     <div
                       style={{
                         display: "flex",
-                        flexDirection: "column",
                         alignItems: "center",
                       }}
                     >
                       <input
-                        type="checkbox"
-                        name="isPointTransfer"
+                        type="text"
+                        name="cashPoint"
                         id=""
-                        checked={teamData.point.isTransfer}
-                        onChange={handleEditCheckbox}
-                        style={{ width: 18, height: 18 }}
+                        value={
+                          teamData.point.cash
+                            ? teamData.point.cash.toLocaleString()
+                            : 0
+                        }
+                        onChange={handleEditInput}
+                        onBlur={handleUpdateTeam}
+                        style={{ textAlign: "right" }}
                       />
-                      <div style={{ fontSize: "0.8rem" }}>이체</div>
+                      p
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          name="isPointTransfer"
+                          id=""
+                          checked={teamData.point.isTransfer}
+                          onChange={handleEditCheckbox}
+                          style={{ width: 18, height: 18 }}
+                        />
+                        <div style={{ fontSize: "0.8rem", minWidth: 26 }}>
+                          이체
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
