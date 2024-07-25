@@ -49,75 +49,11 @@ const initialState: TTable = {
     {
       tableId: "table-0",
       tableName: "1",
-      teams: [
-        {
-          teamId: "team-0",
-          teamType: "cur",
-          arriveTime: 1720772111910,
-          member: "눌지 외 어른1",
-          defaultDrink: "아아",
-          orders: "참치1",
-          pay: {
-            isTransfer: false,
-            cash: 10000,
-            card: 0,
-          },
-          point: {
-            isTransfer: false,
-            use: 0,
-            cash: 0,
-            card: 0,
-          },
-        },
-        {
-          teamId: "team-1",
-          teamType: "cur",
-          arriveTime: 1720772111917,
-          member: "눌자 외 어른1",
-          defaultDrink: "시그",
-          orders: "치탕1",
-          pay: {
-            isTransfer: false,
-            cash: 10000,
-            card: 0,
-          },
-          point: {
-            isTransfer: false,
-            use: 0,
-            cash: 0,
-            card: 0,
-          },
-        },
-      ],
+      teams: [],
     },
     {
       tableId: "table-1",
       tableName: "2",
-      teams: [
-        {
-          teamId: "team-4",
-          teamType: "cur",
-          arriveTime: 1720772111917,
-          member: "눌자 외 어른1",
-          defaultDrink: "시그",
-          orders: "치탕1",
-          pay: {
-            isTransfer: false,
-            cash: 10000,
-            card: 0,
-          },
-          point: {
-            isTransfer: false,
-            use: 0,
-            cash: 0,
-            card: 0,
-          },
-        },
-      ],
-    },
-    {
-      tableId: "table-13",
-      tableName: "2.5",
       teams: [],
     },
     {
@@ -176,49 +112,8 @@ const initialState: TTable = {
       teams: [],
     },
   ],
-  waitTeams: [
-    {
-      teamId: "team-2",
-      teamType: "wait",
-      arriveTime: 1720772111915,
-      member: "놀지 외 어른1",
-      defaultDrink: "아아",
-      orders: "",
-      pay: {
-        isTransfer: false,
-        cash: 10000,
-        card: 0,
-      },
-      point: {
-        isTransfer: false,
-        use: 0,
-        cash: 0,
-        card: 0,
-      },
-    },
-  ],
-  exitTeams: [
-    {
-      teamId: "team-3",
-      teamType: "exit",
-      arriveTime: 1720772111910,
-      exitTime: 1720775121920,
-      member: "날지 외 어른1",
-      defaultDrink: "아아",
-      orders: "파스타1",
-      pay: {
-        isTransfer: false,
-        cash: 10000,
-        card: 0,
-      },
-      point: {
-        isTransfer: true,
-        use: 2000,
-        cash: 57500,
-        card: 0,
-      },
-    },
-  ],
+  waitTeams: [],
+  exitTeams: [],
 };
 
 const tablesSlice = createSlice({
