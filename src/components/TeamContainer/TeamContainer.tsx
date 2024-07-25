@@ -87,6 +87,7 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
                   right: 0,
                   width: 40,
                   height: 40,
+                  cursor: "pointer",
                 }}
                 onClick={handleDownloadTextFile}
               />
