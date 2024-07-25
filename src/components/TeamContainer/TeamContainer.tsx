@@ -93,6 +93,7 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
               />
             )}
           </div>
+          {wait ? <AddButton type="team" teamType="wait" /> : null}
           <div
             style={{
               display: "flex",
@@ -104,7 +105,6 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
               minWidth: 1163,
             }}
           >
-            {wait ? <AddButton type="team" teamType="wait" /> : null}
             {teams.map((team, i) => (
               <Team key={team.teamId} team={team} index={i} />
             ))}
