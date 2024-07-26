@@ -14,18 +14,25 @@
 - **Table**
   - add Table
   - Delete Table exclude default table
+  - default 값 설정
+    - table
 - **Drag & Drop** _with.react-beautiful-dnd_
 - **Download** get data to .txt file
 - **Design**
   - change text to icon _with.react-icons_
   - styling inline css
   - hover, input, box
+- **Deploy**
+  - github pages
+  - icon 변경
+- **Offline**
+  - PWA
 
 ### To be added
 
 - 삭제 시 확인 팝업
 - offline : 메모장처럼 오프라인에서 사용가능하도록 기능
-  - localStorage?
+  - 새로고침을 눌렀을 경우에도 데이터 유지. localStorage?
 
 ### To be modified
 
@@ -37,13 +44,15 @@
 - 퇴장 처리 draggable 삭제
 - 테이블 삭제 시 팀 정보들도 같이 삭제를 할 지 아니면, 대기로 옮길지 고민
 - 팀 추가 버튼 사이즈 줄이기 why? 다른 테이블을 누르는 과정에서 눌릴 수 있다.
+- design
+  - pwa 화면 하단이 꽉 안차는 에러
 
 ### Not Necessary
 
 - check order : 주문이 나갔는지 확인하는 기능
 - calculate : 주문 금액 계산 기능
   - add price data : 결제된 최종 금액 계산을 위한 메뉴 가격 데이터 추가
-- sort table : 테이블 생성 후 순서대로 정렬
+- sort table : 테이블 생성 후 순서(이름순)대로 정렬
 - backend
   - collect data
   - caculate data
@@ -54,3 +63,4 @@
 - design
   - add reset css
   - animation1 : 대기에서 테이블로 옮길 때 배경색 물드는 애니메이션
+- deafult 값 수정
