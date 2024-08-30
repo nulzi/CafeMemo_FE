@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ITable, ITeam, TTeamType } from "../../types";
+import { setLocalData } from "../../utils/localStorage";
 
 type TTable = {
   currentTables: ITable[];
@@ -121,7 +122,7 @@ const tablesSlice = createSlice({
   initialState,
   reducers: {
     init: (state) => {
-      localStorage.setItem("initialState", JSON.stringify(initialState));
+      setLocalData("initialState", JSON.stringify(initialState));
     },
     changeTableName: (state, { payload }: PayloadAction<TChangeTableName>) => {
       state.currentTables = state.currentTables.map((table) =>
