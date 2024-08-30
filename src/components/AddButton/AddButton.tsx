@@ -8,10 +8,10 @@ import "./AddButton.css";
 type TAddButtonProps = {
   type: string;
   teamType: TTeamType;
-  tableName?: string;
+  tableId?: string;
 };
 
-const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
+const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableId }) => {
   const dispatch = useTypedDispatch();
 
   const handleAddTable = () => {
@@ -46,7 +46,7 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableName }) => {
             card: 0,
           },
         },
-        tableName,
+        tableId,
       })
     );
   };
