@@ -113,7 +113,7 @@ const Table: FC<TTableProps> = ({ table }) => {
             <div style={{ width: 1, height: 30 }} />
           )}
           {provided.placeholder}
-          <AddButton type={"team"} teamType="cur" tableName={tableName} />
+          <AddButton type={"team"} teamType="cur" tableId={tableId} />
         </div>
       )}
     </Droppable>

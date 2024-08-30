@@ -19,7 +19,7 @@ type TDeleteTable = {
 type TAddTeam = {
   teamType: TTeamType;
   team: ITeam;
-  tableName?: string;
+  tableId?: string;
 };
 
 type TUpdateTeam = {
@@ -141,7 +141,7 @@ const tablesSlice = createSlice({
     addTeam: (state, { payload }: PayloadAction<TAddTeam>) => {
       payload.teamType === "cur"
         ? state.currentTables.map((table) =>
-            table.tableName === payload.tableName
+            table.tableId === payload.tableId
               ? {
                   ...table,
                   teams: table.teams.push(payload.team),
