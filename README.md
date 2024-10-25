@@ -1,5 +1,46 @@
-# Cafe Front Desk
+# Cafe Memo
 
+## Current
+### Main
+  - first page
+<img width="1000" alt="main page" src="https://github.com/user-attachments/assets/648f6370-7137-4d4e-88fe-e6cc87754ff4"/>
+
+### Add & Mod Table
+  - add table feature create new table named 'new'
+  - can edit table name using double click
+<img width="700" alt="add & mod table" src="https://github.com/user-attachments/assets/a7416459-4e95-404b-bab9-0e0212273a32"/>
+
+### Add Team
+  - add team using click icon
+  - show/hide pay info
+<img width="300" alt="add team in table" src="https://github.com/user-attachments/assets/51506121-6356-4d84-a3a1-0e336c94a060"/>
+<img width="700" alt="add team in wait" src="https://github.com/user-attachments/assets/3b00cec2-60d4-478a-be57-3e334aa9ad99"/>
+
+### Mod Team Info
+  - can edit team info
+    - time
+    - member
+    - order list
+    - pay info(credit card, cash)
+<img width="300" alt="mod team info" src="https://github.com/user-attachments/assets/fb3b4159-5c75-4f53-9378-772889a344b2"/>
+
+### Move Team
+  - move team using drag and drop
+
+https://github.com/user-attachments/assets/e669c903-d880-4a53-bc61-4cd8eab288aa
+
+### Exit Team
+  - enter pay info
+<img width="1000" alt="mod team info" src="https://github.com/user-attachments/assets/a662a6cb-a5ae-4138-9d39-d73b887c0330"/>
+
+### Save Data
+  - save exited team data to 'txt' file with current date
+    - entrance time(pay info/default drink)
+    - member
+    - order list
+<img width="300" alt="save data" src="https://github.com/user-attachments/assets/2af68e60-fe24-4c19-bcdf-1eb469dd9075"/>
+
+## In Progress
 ### Feature
 
 - **store** _with. redux toolkit_
