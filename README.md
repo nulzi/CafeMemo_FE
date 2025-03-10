@@ -1,5 +1,5 @@
 # Cafe Memo
-
+https://cafe-fe-phi.vercel.app/
 ## Current
 ### Main
   - first page
@@ -41,6 +41,7 @@ https://github.com/user-attachments/assets/e669c903-d880-4a53-bc61-4cd8eab288aa
 <img width="300" alt="save data" src="https://github.com/user-attachments/assets/2af68e60-fe24-4c19-bcdf-1eb469dd9075"/>
 
 ## In Progress
+https://nulzi-dev.tistory.com/276
 ### Feature
 
 - **store** _with. redux toolkit_
