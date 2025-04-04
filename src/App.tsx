@@ -3,8 +3,8 @@ import "./App.css";
 import TablesContainer from "./components/TablesContainer/TablesContainer";
 import TeamContainer from "./components/TeamContainer/TeamContainer";
 import { useTypedDispatch, useTypedSelector } from "./hooks/redux";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { init, moveTeam } from "./store/slices/tablesSlice";
+import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
 function App() {
   const dispatch = useTypedDispatch();
@@ -16,27 +16,36 @@ function App() {
     dispatch(init());
   }, []);
 
-  const handleDragEnd = (result: DropResult) => {
-    const { destination, source } = result;
-    if (!destination) return;
+  useEffect(() => {
+    return monitorForElements({
+      onDrop({ source, location }) {
+        const destination = location.current.dropTargets[0];
+        if (!destination) {
+          return;
+        }
+        const destinationTable = destination.data.tableName as string;
+        const sourceTable = source.data.tableName as string;
+        const teamId = source.data.teamId as string;
+        const tableNameList = currentTables.map((table) => table.tableName);
 
-    dispatch(
-      moveTeam({
-        droppableIdStart: source.droppableId,
-        droppableIdEnd: destination.droppableId,
-        droppableIndexStart: source.index,
-        droppableIndexEnd: destination.index,
-      })
-    );
-  };
+        // 혹시 모를 이상한 문자열 제외
+        if (
+          ![...tableNameList, "wait", "exit"].includes(sourceTable) ||
+          ![...tableNameList, "wait", "exit"].includes(destinationTable)
+        ) {
+          return;
+        }
+
+        dispatch(moveTeam({ sourceTable, destinationTable, teamId }));
+      },
+    });
+  }, [currentTables, waitTeams, exitTeams]);
 
   return (
     <div className="App">
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <TablesContainer tables={currentTables} />
-        <TeamContainer wait teams={waitTeams} />
-        <TeamContainer teams={exitTeams} />
-      </DragDropContext>
+      <TablesContainer tables={currentTables} />
+      <TeamContainer wait teams={waitTeams} />
+      <TeamContainer teams={exitTeams} />
     </div>
   );
 }

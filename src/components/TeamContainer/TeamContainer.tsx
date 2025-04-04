@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Team from "../Team/Team";
 import AddButton from "../AddButton/AddButton";
-import { ITeam } from "../../types";
-import { Droppable } from "react-beautiful-dnd";
+import { ITeam, TTeamType } from "../../types";
 import { HiDocumentDownload } from "react-icons/hi";
+import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
 type TTeamContainerProps = {
   wait?: boolean;
@@ -11,6 +11,40 @@ type TTeamContainerProps = {
 };
 
 const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
+  const dropTargetRef = useRef(null);
+  const [isDraggedOver, setIsDraggedOver] = useState(false);
+
+  useEffect(() => {
+    const el = dropTargetRef.current;
+
+    if (el) {
+      return dropTargetForElements({
+        element: el,
+        getData: () => ({ tableName: wait ? "wait" : "exit" }),
+        canDrop: ({ source }) => {
+          const tableName = wait ? "wait" : "exit";
+
+          if (tableName === "exit") {
+            return false;
+          }
+
+          const teamType = source.data.teamType as TTeamType;
+
+          if (tableName === teamType) {
+            return false;
+          }
+
+          return true;
+        },
+        onDragEnter: () => setIsDraggedOver(true),
+        onDragLeave: () => setIsDraggedOver(false),
+        onDrop: () => setIsDraggedOver(false),
+      });
+    } else {
+      console.error("error");
+    }
+  }, [wait, teams]);
+
   const handleDownloadTextFile = () => {
     const date = new Date();
     const curDate = `${date.getFullYear()}.${
@@ -61,58 +95,60 @@ const TeamContainer: FC<TTeamContainerProps> = ({ wait, teams }) => {
   };
 
   return (
-    <Droppable droppableId={wait ? "waitTeams" : "exitTeams"}>
-      {(provided) => (
-        <div
-          style={{
-            backgroundColor: wait ? "#A08F65" : "#B2AA99",
-            borderRadius: 7,
-            padding: 8,
-            margin: "15px 0px",
-            width: "100%",
-            boxSizing: "border-box",
-          }}
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-        >
-          <div style={{ position: "relative" }}>
-            <h2 style={{ marginTop: 0, textAlign: "center", color: "#FDF9F0" }}>
-              {wait ? "대기" : "퇴장"}
-            </h2>
-            {wait ? null : (
-              <HiDocumentDownload
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  width: 40,
-                  height: 40,
-                  cursor: "pointer",
-                }}
-                onClick={handleDownloadTextFile}
-              />
-            )}
-          </div>
-          {wait ? <AddButton type="team" teamType="wait" /> : null}
-          <div
+    <div
+      style={{
+        // 퇴장에는 드래그를 할 일이 없다. '퇴장 버튼' 이용
+        backgroundColor: isDraggedOver
+          ? "#2c1f04"
+          : wait
+          ? "#A08F65"
+          : "#B2AA99",
+        borderRadius: 7,
+        padding: 8,
+        margin: "15px 0px",
+        width: "100%",
+        boxSizing: "border-box",
+      }}
+      ref={dropTargetRef}
+    >
+      <div style={{ position: "relative" }}>
+        <h2 style={{ marginTop: 0, textAlign: "center", color: "#FDF9F0" }}>
+          {wait ? "대기" : "퇴장"}
+        </h2>
+        {wait ? null : (
+          <HiDocumentDownload
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              rowGap: "10px",
-              columnGap: "10px",
-              // border: "solid 1px red",
-              height: "max-content",
-              minWidth: 1163,
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: 40,
+              height: 40,
+              cursor: "pointer",
             }}
-          >
-            {teams.map((team, i) => (
-              <Team key={team.teamId} team={team} index={i} />
-            ))}
-            {provided.placeholder}
-          </div>
-        </div>
-      )}
-    </Droppable>
+            onClick={handleDownloadTextFile}
+          />
+        )}
+      </div>
+      {wait ? <AddButton type="team" teamType="wait" /> : null}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          rowGap: "10px",
+          columnGap: "10px",
+          height: "max-content",
+          minWidth: 1163,
+        }}
+      >
+        {teams.map((team) => (
+          <Team
+            key={team.teamId}
+            team={team}
+            tableName={wait ? "wait" : "exit"}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 

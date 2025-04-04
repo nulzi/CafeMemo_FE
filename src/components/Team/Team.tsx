@@ -1,22 +1,45 @@
-import React, { ChangeEvent, FC, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { ITeam } from "../../types";
 import { useTypedDispatch } from "../../hooks/redux";
 import { deleteTeam, exit, updateTeam } from "../../store/slices/tablesSlice";
 import { getFormattedTime } from "../../utils/time";
-import { Draggable } from "react-beautiful-dnd";
+// import { Draggable } from "react-beautiful-dnd";
+import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { HiTrash, HiOutlineLogout, HiCreditCard, HiCash } from "react-icons/hi";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import "./Team.css";
 
 type TTeamProps = {
   team: ITeam;
-  index: number;
+  tableName: string;
 };
 
-const Team: FC<TTeamProps> = ({ team, index }) => {
+const Team: FC<TTeamProps> = ({ team, tableName }) => {
   const [teamData, setTeamData] = useState(team);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useTypedDispatch();
+  const draggableRef = useRef(null);
+  const [dragging, setDragging] = useState<boolean>(false);
+
+  useEffect(() => {
+    const el = draggableRef.current;
+
+    if (el) {
+      return draggable({
+        element: el,
+        getInitialData: () => ({
+          tableName,
+          teamId: team.teamId,
+          teamType: team.teamType,
+        }),
+        onDragStart: () => setDragging(true),
+        onDrop: () => setDragging(false),
+      });
+    } else {
+      // error 처리
+      console.error("error");
+    }
+  }, [tableName]);
 
   const handleEditInput = (e: ChangeEvent<HTMLInputElement>) => {
     // Q.현재 하나의 함수로 처리하고 있지만 그냥 각자의 handler가 있는게 더 효율적이라는 생각이 든다.
@@ -125,245 +148,198 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
   };
 
   return (
-    <Draggable draggableId={team.teamId} index={index}>
-      {(provided) => (
+    <div
+      className={teamData.teamType === "cur" ? "TableTeam" : "Team quaterWidth"}
+      style={dragging ? { opacity: 0.4 } : {}}
+      ref={draggableRef}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          rowGap: 5,
+        }}
+      >
         <div
-          className={
-            teamData.teamType === "cur" ? "TableTeam" : "Team quaterWidth"
-          }
-          ref={provided.innerRef}
-          {...provided.dragHandleProps}
-          {...provided.draggableProps}
+          style={{
+            textAlign: "center",
+            fontWeight: 600,
+          }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              rowGap: 5,
-            }}
-          >
-            <div
-              style={{
-                textAlign: "center",
-                fontWeight: 600,
-              }}
-            >
-              이용 내역
-            </div>
-            <div className="input">
-              <label>입장</label>
+          이용 내역
+        </div>
+        <div className="input">
+          <label>입장</label>
+          <input
+            style={{ minWidth: 100 }}
+            type="time"
+            name="arrive"
+            value={getFormattedTime(teamData.arriveTime)}
+            onChange={handleEditInput}
+            onBlur={handleUpdateTeam}
+          />
+          {teamData.teamType === "exit" ? (
+            <>
+              <label> ~ 퇴장</label>
               <input
                 style={{ minWidth: 100 }}
                 type="time"
-                name="arrive"
-                value={getFormattedTime(teamData.arriveTime)}
+                name="exit"
+                value={getFormattedTime(teamData.exitTime!)}
                 onChange={handleEditInput}
                 onBlur={handleUpdateTeam}
               />
-              {teamData.teamType === "exit" ? (
-                <>
-                  <label> ~ 퇴장</label>
-                  <input
-                    style={{ minWidth: 100 }}
-                    type="time"
-                    name="exit"
-                    value={getFormattedTime(teamData.exitTime!)}
-                    onChange={handleEditInput}
-                    onBlur={handleUpdateTeam}
-                  />
-                </>
-              ) : null}
-            </div>
+            </>
+          ) : null}
+        </div>
+        <div className="input">
+          <label>인원</label>
+          <input
+            type="text"
+            name="member"
+            id=""
+            value={teamData.member}
+            onChange={handleEditInput}
+            onBlur={handleUpdateTeam}
+          />
+        </div>
+        <div className="input">
+          <label>기본음료</label>
+          <input
+            type="text"
+            name="defaultDrink"
+            id=""
+            value={teamData.defaultDrink}
+            onChange={handleEditInput}
+            onBlur={handleUpdateTeam}
+          />
+        </div>
+        <div className="input">
+          <label>주문</label>
+          <textarea
+            name="orders"
+            id=""
+            spellCheck={false}
+            value={teamData.orders}
+            onChange={handleEditTextArea}
+            onBlur={handleUpdateTeam}
+          />
+        </div>
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "10px",
+            paddingTop: "10px",
+            fontWeight: 600,
+            borderTop: "1px dashed black",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <span onClick={handleOpen}>결제 내역</span>
+          {teamData.teamType === "exit" ? null : isOpen ? (
+            <IoMdArrowDropdown style={{ width: 25, height: 25 }} />
+          ) : (
+            <IoMdArrowDropup style={{ width: 25, height: 25 }} />
+          )}
+        </div>
+        {teamData.teamType === "exit" || isOpen ? (
+          <>
             <div className="input">
-              <label>인원</label>
+              <HiCreditCard style={{ width: 20, height: 20 }} />
               <input
                 type="text"
-                name="member"
+                name="card"
                 id=""
-                value={teamData.member}
+                value={
+                  teamData.pay.card ? teamData.pay.card.toLocaleString() : 0
+                }
                 onChange={handleEditInput}
                 onBlur={handleUpdateTeam}
+                style={{ textAlign: "right" }}
               />
+              원
             </div>
             <div className="input">
-              <label>기본음료</label>
-              <input
-                type="text"
-                name="defaultDrink"
-                id=""
-                value={teamData.defaultDrink}
-                onChange={handleEditInput}
-                onBlur={handleUpdateTeam}
-              />
-            </div>
-            <div className="input">
-              <label>주문</label>
-              <textarea
-                name="orders"
-                id=""
-                spellCheck={false}
-                value={teamData.orders}
-                onChange={handleEditTextArea}
-                onBlur={handleUpdateTeam}
-              />
-            </div>
-            <div
-              style={{
-                textAlign: "center",
-                marginTop: "10px",
-                paddingTop: "10px",
-                fontWeight: 600,
-                borderTop: "1px dashed black",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <span onClick={handleOpen}>결제 내역</span>
-              {teamData.teamType === "exit" ? null : isOpen ? (
-                <IoMdArrowDropdown style={{ width: 25, height: 25 }} />
-              ) : (
-                <IoMdArrowDropup style={{ width: 25, height: 25 }} />
-              )}
-            </div>
-            {teamData.teamType === "exit" || isOpen ? (
-              <>
-                <div className="input">
-                  <HiCreditCard style={{ width: 20, height: 20 }} />
-                  <input
-                    type="text"
-                    name="card"
-                    id=""
-                    value={
-                      teamData.pay.card ? teamData.pay.card.toLocaleString() : 0
-                    }
-                    onChange={handleEditInput}
-                    onBlur={handleUpdateTeam}
-                    style={{ textAlign: "right" }}
-                  />
-                  원
-                </div>
-                <div className="input">
-                  <HiCash style={{ width: 20, height: 20 }} />
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      name="cash"
-                      id=""
-                      value={
-                        teamData.pay.cash
-                          ? teamData.pay.cash.toLocaleString()
-                          : 0
-                      }
-                      onChange={handleEditInput}
-                      onBlur={handleUpdateTeam}
-                      style={{ textAlign: "right" }}
-                    />
-                    원
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        name="isPayTransfer"
-                        id=""
-                        checked={teamData.pay.isTransfer}
-                        onChange={handleEditCheckbox}
-                        style={{ width: 18, height: 18 }}
-                      />
-                      <div style={{ fontSize: "0.8rem", minWidth: 26 }}>
-                        이체
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <HiCash style={{ width: 20, height: 20 }} />
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <input
+                  type="text"
+                  name="cash"
+                  id=""
+                  value={
+                    teamData.pay.cash ? teamData.pay.cash.toLocaleString() : 0
+                  }
+                  onChange={handleEditInput}
+                  onBlur={handleUpdateTeam}
+                  style={{ textAlign: "right" }}
+                />
+                원
                 <div
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    rowGap: 2,
+                    alignItems: "center",
                   }}
                 >
-                  <label>포인트 충전</label>
-                  <div className="input">
-                    <HiCreditCard style={{ width: 20, height: 20 }} />
-                    <input
-                      type="text"
-                      name="cardPoint"
-                      id=""
-                      value={
-                        teamData.point.card
-                          ? teamData.point.card.toLocaleString()
-                          : 0
-                      }
-                      onChange={handleEditInput}
-                      onBlur={handleUpdateTeam}
-                      style={{ textAlign: "right" }}
-                    />
-                    p
-                  </div>
-                  <div className="input">
-                    <HiCash style={{ width: 20, height: 20 }} />
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <input
-                        type="text"
-                        name="cashPoint"
-                        id=""
-                        value={
-                          teamData.point.cash
-                            ? teamData.point.cash.toLocaleString()
-                            : 0
-                        }
-                        onChange={handleEditInput}
-                        onBlur={handleUpdateTeam}
-                        style={{ textAlign: "right" }}
-                      />
-                      p
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignItems: "center",
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          name="isPointTransfer"
-                          id=""
-                          checked={teamData.point.isTransfer}
-                          onChange={handleEditCheckbox}
-                          style={{ width: 18, height: 18 }}
-                        />
-                        <div style={{ fontSize: "0.8rem", minWidth: 26 }}>
-                          이체
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <input
+                    type="checkbox"
+                    name="isPayTransfer"
+                    id=""
+                    checked={teamData.pay.isTransfer}
+                    onChange={handleEditCheckbox}
+                    style={{ width: 18, height: 18 }}
+                  />
+                  <div style={{ fontSize: "0.8rem", minWidth: 26 }}>이체</div>
                 </div>
-                <div>
-                  <label>사용 포인트</label>
+              </div>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                rowGap: 2,
+              }}
+            >
+              <label>포인트 충전</label>
+              <div className="input">
+                <HiCreditCard style={{ width: 20, height: 20 }} />
+                <input
+                  type="text"
+                  name="cardPoint"
+                  id=""
+                  value={
+                    teamData.point.card
+                      ? teamData.point.card.toLocaleString()
+                      : 0
+                  }
+                  onChange={handleEditInput}
+                  onBlur={handleUpdateTeam}
+                  style={{ textAlign: "right" }}
+                />
+                p
+              </div>
+              <div className="input">
+                <HiCash style={{ width: 20, height: 20 }} />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
                   <input
                     type="text"
-                    name="point"
+                    name="cashPoint"
                     id=""
                     value={
-                      teamData.point.use
-                        ? teamData.point.use.toLocaleString()
+                      teamData.point.cash
+                        ? teamData.point.cash.toLocaleString()
                         : 0
                     }
                     onChange={handleEditInput}
@@ -371,29 +347,61 @@ const Team: FC<TTeamProps> = ({ team, index }) => {
                     style={{ textAlign: "right" }}
                   />
                   p
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      name="isPointTransfer"
+                      id=""
+                      checked={teamData.point.isTransfer}
+                      onChange={handleEditCheckbox}
+                      style={{ width: 18, height: 18 }}
+                    />
+                    <div style={{ fontSize: "0.8rem", minWidth: 26 }}>이체</div>
+                  </div>
                 </div>
-              </>
-            ) : null}
-          </div>
-          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-            <div className="iconContainer" style={{ marginRight: "10px" }}>
-              <HiTrash
-                style={{ width: "100%", height: "100%" }}
-                onClick={handleDeleteTeam}
-              />
-            </div>
-            {teamData.teamType === "exit" ? null : (
-              <div className="iconContainer" style={{ marginLeft: "10px" }}>
-                <HiOutlineLogout
-                  style={{ width: "100%", height: "100%" }}
-                  onClick={handleExit}
-                />
               </div>
-            )}
-          </div>
+            </div>
+            <div>
+              <label>사용 포인트</label>
+              <input
+                type="text"
+                name="point"
+                id=""
+                value={
+                  teamData.point.use ? teamData.point.use.toLocaleString() : 0
+                }
+                onChange={handleEditInput}
+                onBlur={handleUpdateTeam}
+                style={{ textAlign: "right" }}
+              />
+              p
+            </div>
+          </>
+        ) : null}
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+        <div className="iconContainer" style={{ marginRight: "10px" }}>
+          <HiTrash
+            style={{ width: "100%", height: "100%" }}
+            onClick={handleDeleteTeam}
+          />
         </div>
-      )}
-    </Draggable>
+        {teamData.teamType === "exit" ? null : (
+          <div className="iconContainer" style={{ marginLeft: "10px" }}>
+            <HiOutlineLogout
+              style={{ width: "100%", height: "100%" }}
+              onClick={handleExit}
+            />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

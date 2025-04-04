@@ -18,7 +18,8 @@ const AddButton: FC<TAddButtonProps> = ({ type, teamType, tableId }) => {
     dispatch(
       addTable({
         tableId: `table-${Date.now()}`,
-        tableName: "new",
+        // dnd를 위한 name 구분
+        tableName: `new${Date.now()}`,
         teams: [],
       })
     );
