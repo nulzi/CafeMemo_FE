@@ -169,22 +169,24 @@ const Team: FC<TTeamProps> = ({ team, tableName }) => {
           이용 내역
         </div>
         <div className="input">
-          <label>입장</label>
+          <label htmlFor={`arrive-${team.teamId}`}>입장</label>
           <input
             style={{ minWidth: 100 }}
             type="time"
             name="arrive"
+            id={`arrive-${team.teamId}`}
             value={getFormattedTime(teamData.arriveTime)}
             onChange={handleEditInput}
             onBlur={handleUpdateTeam}
           />
           {teamData.teamType === "exit" ? (
             <>
-              <label> ~ 퇴장</label>
+              <label htmlFor={`exit-${team.teamId}`}> ~ 퇴장</label>
               <input
                 style={{ minWidth: 100 }}
                 type="time"
                 name="exit"
+                id={`exit-${team.teamId}`}
                 value={getFormattedTime(teamData.exitTime!)}
                 onChange={handleEditInput}
                 onBlur={handleUpdateTeam}
@@ -193,32 +195,32 @@ const Team: FC<TTeamProps> = ({ team, tableName }) => {
           ) : null}
         </div>
         <div className="input">
-          <label>인원</label>
+          <label htmlFor={`member-${team.teamId}`}>인원</label>
           <input
             type="text"
             name="member"
-            id=""
+            id={`member-${team.teamId}`}
             value={teamData.member}
             onChange={handleEditInput}
             onBlur={handleUpdateTeam}
           />
         </div>
         <div className="input">
-          <label>기본음료</label>
+          <label htmlFor={`dftDrink-${team.teamId}`}>기본음료</label>
           <input
             type="text"
             name="defaultDrink"
-            id=""
+            id={`dftDrink-${team.teamId}`}
             value={teamData.defaultDrink}
             onChange={handleEditInput}
             onBlur={handleUpdateTeam}
           />
         </div>
         <div className="input">
-          <label>주문</label>
+          <label htmlFor={`order-${team.teamId}`}>주문</label>
           <textarea
             name="orders"
-            id=""
+            id={`order-${team.teamId}`}
             spellCheck={false}
             value={teamData.orders}
             onChange={handleEditTextArea}
